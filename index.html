@@ -91,9 +91,6 @@
     transition: color .2s;
   }
   .navlinks a:hover { color: var(--parchment); }
-  @media (max-width: 780px) {
-    .navlinks { display: none; }
-  }
   .nav-cta {
     border: 1px solid var(--line-strong);
     padding: 10px 20px;
@@ -101,6 +98,48 @@
     font-size: 14px;
     text-decoration: none;
     white-space: nowrap;
+  }
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 12px;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    margin: 0 auto;
+    background: var(--parchment);
+  }
+  @media (max-width: 780px) {
+    .nav-toggle { display: inline-flex; }
+    .navlinks {
+      display: none;
+      position: absolute;
+      top: 76px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: rgba(22, 32, 31, 0.98);
+      border-bottom: 1px solid var(--line);
+      padding: 8px 0;
+    }
+    .navlinks.open { display: flex; }
+    .navlinks a {
+      padding: 14px 32px;
+      border-top: 1px solid var(--line);
+    }
+    .navlinks a:first-child { border-top: none; }
   }
 
   /* ---------- Hero ---------- */
@@ -595,6 +634,9 @@
       <a href="#reserve">Book</a>
     </div>
     <a class="nav-cta" href="#reserve">Book a Stay</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -929,6 +971,20 @@ lbEl.addEventListener('touchend', function(e) {
 // Click outside image closes
 lbEl.addEventListener('click', function(e) {
   if (e.target === lbEl) closeGallery();
+});
+
+// Mobile nav toggle
+function toggleNav() {
+  const links = document.querySelector('.navlinks');
+  const btn = document.querySelector('.nav-toggle');
+  const isOpen = links.classList.toggle('open');
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+document.querySelectorAll('.navlinks a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    document.querySelector('.navlinks').classList.remove('open');
+    document.querySelector('.nav-toggle').setAttribute('aria-expanded', 'false');
+  });
 });
 </script>
 
