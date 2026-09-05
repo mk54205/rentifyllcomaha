@@ -530,6 +530,8 @@
     color: var(--parchment-dim);
     text-align: center;
   }
+  .ticket-note.success { color: var(--brass-bright); }
+  .ticket-note.error { color: var(--clay); }
 
   /* ---------- Footer ---------- */
   footer {
@@ -781,21 +783,24 @@
       </div>
     </div>
     <div class="ticket">
-      <div class="ticket-inner">
+      <form class="ticket-inner" id="booking-form">
+        <input type="hidden" name="access_key" value="f955a20d-9ef7-48a8-91bf-57e5b657edc1">
+        <input type="hidden" name="subject" value="New booking request — Rentify LLC website">
+        <input type="hidden" name="from_name" value="Rentify LLC website">
         <div class="field-row">
           <div class="field">
             <label for="name">Full name</label>
-            <input id="name" type="text" placeholder="Alex Whitfield">
+            <input id="name" name="name" type="text" placeholder="Alex Whitfield" required>
           </div>
           <div class="field">
             <label for="email">Email</label>
-            <input id="email" type="email" placeholder="alex@email.com">
+            <input id="email" name="email" type="email" placeholder="alex@email.com" required>
           </div>
         </div>
         <div class="field-row">
           <div class="field">
             <label for="region">Preferred property</label>
-            <select id="region">
+            <select id="region" name="preferred_property">
               <option>Your Home Away from Home</option>
               <option>Quiet Home Near Costco &amp; Target</option>
               <option>Modern Omaha-Elkhorn Home</option>
@@ -804,7 +809,7 @@
           </div>
           <div class="field">
             <label for="car">Preferred vehicle</label>
-            <select id="car">
+            <select id="car" name="preferred_vehicle">
               <option>Kia Sorento</option>
               <option>Chevrolet Silverado 1500</option>
               <option>No vehicle needed</option>
@@ -814,16 +819,16 @@
         <div class="field-row">
           <div class="field">
             <label for="dates">Travel dates</label>
-            <input id="dates" type="text" placeholder="e.g. 14–20 October">
+            <input id="dates" name="travel_dates" type="text" placeholder="e.g. 14–20 October" required>
           </div>
           <div class="field">
             <label for="party">Party size</label>
-            <input id="party" type="number" placeholder="2" min="1">
+            <input id="party" name="party_size" type="number" placeholder="2" min="1">
           </div>
         </div>
-        <button class="ticket-submit" type="button">Request a proposal</button>
-        <div class="ticket-note">No payment is taken at this stage</div>
-      </div>
+        <button class="ticket-submit" type="submit" id="ticket-submit-btn">Request a proposal</button>
+        <div class="ticket-note" id="ticket-status">No payment is taken at this stage</div>
+      </form>
     </div>
   </div>
 </section>
@@ -986,6 +991,51 @@ document.querySelectorAll('.navlinks a').forEach(function(a) {
     document.querySelector('.nav-toggle').setAttribute('aria-expanded', 'false');
   });
 });
+
+// Booking form submission (Web3Forms)
+(function() {
+  const bookingForm = document.getElementById('booking-form');
+  if (!bookingForm) return;
+  const submitBtn = document.getElementById('ticket-submit-btn');
+  const statusEl = document.getElementById('ticket-status');
+  const defaultStatus = statusEl.textContent;
+
+  bookingForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    statusEl.textContent = defaultStatus;
+    statusEl.classList.remove('success', 'error');
+
+    const formData = new FormData(bookingForm);
+    const payload = Object.fromEntries(formData.entries());
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Request a proposal';
+        if (data.success) {
+          statusEl.textContent = "Request sent — we'll be in touch within one business day.";
+          statusEl.classList.add('success');
+          bookingForm.reset();
+        } else {
+          statusEl.textContent = 'Something went wrong. Please try again or email us directly.';
+          statusEl.classList.add('error');
+        }
+      })
+      .catch(function() {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Request a proposal';
+        statusEl.textContent = 'Something went wrong. Please try again or email us directly.';
+        statusEl.classList.add('error');
+      });
+  });
+})();
 </script>
 
 </body>
