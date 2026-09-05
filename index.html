@@ -417,20 +417,17 @@
 
   /* ---------- Fleet ---------- */
   .fleet-scroll {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    margin: 0 -32px;
-    padding-left: 32px;
-    padding-right: 32px;
-    scrollbar-width: thin;
+  }
+  @media (max-width: 900px) {
+    .fleet-scroll { grid-template-columns: 1fr; }
+    .fleet-card .photo { height: 190px; }
   }
   .fleet-card {
-    min-width: 300px;
     border: 1px solid var(--line);
     padding: 0 0 26px;
-    flex-shrink: 0;
     background: linear-gradient(180deg, rgba(236,229,211,0.03), transparent);
   }
   .fleet-card .photo {
