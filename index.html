@@ -74,11 +74,40 @@
     font-weight: 500;
     display: flex;
     align-items: baseline;
-    gap: 8px;
+    gap: 10px;
   }
-  .brand span {
+  .brand-name {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .brand em {
     font-style: italic;
     color: var(--brass-bright);
+  }
+  .brand-loc {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14.5px;
+    letter-spacing: 0.02em;
+    color: var(--parchment-dim);
+    white-space: nowrap;
+  }
+  .brand-loc::before {
+    content: "\00B7";
+    color: var(--brass);
+  }
+  @media (max-width: 560px) {
+    .brand {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1px;
+      font-size: 19px;
+    }
+    .brand-loc { font-size: 12.5px; gap: 0; }
+    .brand-loc::before { content: none; }
   }
   .navlinks {
     display: flex;
@@ -629,7 +658,7 @@
 
 <nav>
   <div class="wrap">
-    <div class="brand">Rentify <span>LLC</span></div>
+    <div class="brand"><span class="brand-name">Rentify <em>LLC</em></span><span class="brand-loc">Omaha</span></div>
     <div class="navlinks">
       <a href="#destinations">Properties</a>
       <a href="#fleet">Vehicles</a>
@@ -837,7 +866,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <div class="brand">Rentify <span>LLC</span></div>
+        <div class="brand"><span class="brand-name">Rentify <em>LLC</em></span><span class="brand-loc">Omaha</span></div>
         <div class="fcol">Vacation rentals &amp; car rentals</div>
       </div>
       <div class="fcol">
