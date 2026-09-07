@@ -677,6 +677,107 @@
     .lightbox .lb-arrow { font-size: 30px; padding: 8px 12px; }
     .lightbox .lb-close { font-size: 26px; top: 12px; right: 12px; }
   }
+
+  /* ---------- Availability calendar ---------- */
+  .avail-trigger {
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line-strong);
+  }
+  .avail-trigger:hover { color: var(--brass-bright); }
+
+  .avail-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 210;
+    background: rgba(10, 14, 13, 0.86);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .avail-modal.open { display: flex; }
+  .avail-card {
+    position: relative;
+    background: var(--ink);
+    border: 1px solid var(--line-strong);
+    max-width: 900px;
+    width: 100%;
+    max-height: 86vh;
+    overflow-y: auto;
+    padding: 34px;
+  }
+  .avail-head { margin-bottom: 22px; }
+  .avail-head h3 { font-size: 24px; margin-top: 6px; }
+  .avail-months {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 720px) {
+    .avail-card { padding: 24px; }
+    .avail-months { grid-template-columns: 1fr; }
+  }
+  .avail-month-name {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--brass-bright);
+    margin-bottom: 10px;
+  }
+  .avail-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    margin-bottom: 3px;
+  }
+  .avail-grid-dow {
+    font-size: 11px;
+    color: var(--parchment-dim);
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .avail-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    background: var(--ink-soft);
+    color: var(--parchment-dim);
+  }
+  .avail-day.empty { background: none; }
+  .avail-day.blocked {
+    background: rgba(168, 80, 58, 0.35);
+    color: var(--parchment-dim);
+    text-decoration: line-through;
+  }
+  .avail-day.past { opacity: 0.35; }
+  .avail-day.today { box-shadow: inset 0 0 0 1px var(--brass-bright); color: var(--parchment); }
+  .avail-loading {
+    color: var(--parchment-dim);
+    font-size: 14px;
+    padding: 20px 0;
+  }
+  .avail-legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--parchment-dim);
+  }
+  .avail-legend .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    vertical-align: middle;
+    border-radius: 2px;
+  }
+  .avail-legend .dot-open { background: var(--ink-soft); border: 1px solid var(--line-strong); }
+  .avail-legend .dot-blocked { background: rgba(168, 80, 58, 0.35); }
 </style>
 </head>
 <body>
@@ -744,7 +845,7 @@
         <div class="idx">01 — Guest Favorite</div>
         <h3>Your Home Away from Home</h3>
         <div class="place">3 bed · 2.5 bath · Omaha, NE (Sarpy County)</div>
-        <div class="price-row"><span>Sleeps 8 · fenced yard &amp; deck · 4.85★ (61 reviews) · 15 photos</span><b>See dates for pricing</b></div>
+        <div class="price-row"><span>Sleeps 8 · fenced yard &amp; deck · 4.85★ (61 reviews) · 15 photos</span><b class="avail-trigger" onclick="openAvailability('property1', 'Your Home Away from Home')">See dates for pricing</b></div>
         </div>
       </div>
       <div class="dest-card">
@@ -760,7 +861,7 @@
         <div class="idx">02 — West Omaha</div>
         <h3>Quiet Home Near Costco &amp; Target</h3>
         <div class="place">3 bed · 2 bath · West Omaha, NE (Douglas County)</div>
-        <div class="price-row"><span>Sleeps 7 · backyard, patio &amp; basement · 4.88★ (48 reviews) · 8 photos</span><b>See dates for pricing</b></div>
+        <div class="price-row"><span>Sleeps 7 · backyard, patio &amp; basement · 4.88★ (48 reviews) · 8 photos</span><b class="avail-trigger" onclick="openAvailability('property2', 'Quiet Home Near Costco & Target')">See dates for pricing</b></div>
         </div>
       </div>
       <div class="dest-card">
@@ -776,7 +877,7 @@
         <div class="idx">03 — Guest Favorite</div>
         <h3>Modern Omaha-Elkhorn Home</h3>
         <div class="place">4 bed · 3 bath · Elkhorn, Omaha (Douglas County)</div>
-        <div class="price-row"><span>Sleeps 8 · walkout basement suite · 5.0★ (9 reviews) · 13 photos</span><b>See dates for pricing</b></div>
+        <div class="price-row"><span>Sleeps 8 · walkout basement suite · 5.0★ (9 reviews) · 13 photos</span><b class="avail-trigger" onclick="openAvailability('property3', 'Modern Omaha-Elkhorn Home')">See dates for pricing</b></div>
         </div>
       </div>
     </div>
@@ -918,6 +1019,21 @@
   <img id="lightbox-img" src="" alt="Property photo">
   <button class="lb-arrow lb-next" onclick="galleryNav(1)">&#8250;</button>
   <div class="lb-counter" id="lightbox-counter"></div>
+</div>
+
+<div class="avail-modal" id="avail-modal">
+  <div class="avail-card">
+    <button class="lb-close" onclick="closeAvailability()">&times;</button>
+    <div class="avail-head">
+      <div class="section-tag">Availability</div>
+      <h3 id="avail-title"></h3>
+    </div>
+    <div class="avail-body" id="avail-body">Loading&hellip;</div>
+    <div class="avail-legend">
+      <span><i class="dot dot-open"></i> Open</span>
+      <span><i class="dot dot-blocked"></i> Booked / unavailable</span>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1089,6 +1205,96 @@ document.querySelectorAll('.navlinks a').forEach(function(a) {
       });
   });
 })();
+// ---------- Availability calendar ----------
+const AVAIL_CACHE = {};
+
+function openAvailability(slug, label) {
+  document.getElementById('avail-title').textContent = label;
+  document.getElementById('avail-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderAvailability(slug);
+}
+
+function closeAvailability() {
+  document.getElementById('avail-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function renderAvailability(slug) {
+  const body = document.getElementById('avail-body');
+  body.innerHTML = '<div class="avail-loading">Loading availability&hellip;</div>';
+  try {
+    let data = AVAIL_CACHE[slug];
+    if (!data) {
+      const res = await fetch('/data/calendars/' + slug + '.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('not found');
+      data = await res.json();
+      AVAIL_CACHE[slug] = data;
+    }
+    body.innerHTML = buildMonths(data.blocked || []);
+  } catch (e) {
+    body.innerHTML = '<div class="avail-loading">Availability calendar coming soon for this property &mdash; contact us below for current dates.</div>';
+  }
+}
+
+function availPad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function availIsBlocked(dateStr, blocked) {
+  return blocked.some(function (r) { return dateStr >= r.start && dateStr < r.end; });
+}
+
+function buildMonths(blocked) {
+  const today = new Date();
+  let html = '<div class="avail-months">';
+  for (let m = 0; m < 3; m++) {
+    const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
+    html += buildMonth(monthDate, blocked);
+  }
+  html += '</div>';
+  return html;
+}
+
+function buildMonth(monthDate, blocked) {
+  const year = monthDate.getFullYear();
+  const month = monthDate.getMonth();
+  const monthName = monthDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  const firstDay = new Date(year, month, 1);
+  const startWeekday = firstDay.getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  let cells = '';
+  for (let i = 0; i < startWeekday; i++) {
+    cells += '<div class="avail-day empty"></div>';
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = year + '-' + availPad(month + 1) + '-' + availPad(d);
+    const blockedDay = availIsBlocked(dateStr, blocked);
+    const past = dateStr < todayStr;
+    const classes = ['avail-day'];
+    if (blockedDay) classes.push('blocked');
+    if (past) classes.push('past');
+    if (dateStr === todayStr) classes.push('today');
+    cells += '<div class="' + classes.join(' ') + '">' + d + '</div>';
+  }
+
+  return (
+    '<div class="avail-month">' +
+    '<div class="avail-month-name">' + monthName + '</div>' +
+    '<div class="avail-grid avail-grid-dow"><div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div></div>' +
+    '<div class="avail-grid">' + cells + '</div>' +
+    '</div>'
+  );
+}
+
+document.addEventListener('keydown', function (e) {
+  const am = document.getElementById('avail-modal');
+  if (am.classList.contains('open') && e.key === 'Escape') closeAvailability();
+});
+
+document.getElementById('avail-modal').addEventListener('click', function (e) {
+  if (e.target === this) closeAvailability();
+});
 </script>
 
 </body>
