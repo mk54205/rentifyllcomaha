@@ -1251,7 +1251,17 @@ async function renderAvailability(slug) {
       data = await res.json();
       AVAIL_CACHE[slug] = data;
     }
-    body.innerHTML = buildMonths(data.blocked || []);
+    let blocked = data.blocked || [];
+    try {
+      const ovRes = await fetch('/data/calendars/override.json', { cache: 'no-store' });
+      if (ovRes.ok) {
+        const ov = await ovRes.json();
+        if (ov && (ov.blockAll === true || (Array.isArray(ov.blockedProperties) && ov.blockedProperties.includes(slug)))) {
+          blocked = [{ start: '2000-01-01', end: '2100-01-01' }];
+        }
+      }
+    } catch (e2) { /* no override file present -- ignore */ }
+    body.innerHTML = buildMonths(blocked);
   } catch (e) {
     body.innerHTML = '<div class="avail-loading">Availability calendar coming soon for this property &mdash; contact us below for current dates.</div>';
   }
