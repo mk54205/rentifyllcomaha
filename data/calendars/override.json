@@ -1,5 +1,5 @@
 {
-  "blockAll": false,
-  "updated": "2026-09-08T02:13:02.930Z",
-  "note": "Issue resolved -- normal availability restored"
+  "blockAll": true,
+  "updated": "2026-09-08T02:16:40.561Z",
+  "note": "Manually blocked by Prad while investigating a calendar issue"
 }
