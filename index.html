@@ -109,6 +109,11 @@
     flex-shrink: 0;
     display: block;
   }
+  .brand-text {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
   .brand-name {
     display: flex;
     align-items: baseline;
@@ -134,13 +139,13 @@
     color: var(--brass);
   }
   @media (max-width: 560px) {
-    .brand {
+    .brand-mark { height: 34px; width: 34px; }
+    .brand-text {
       flex-direction: column;
       align-items: flex-start;
       gap: 1px;
       font-size: 19px;
     }
-    .brand-mark { height: 34px; width: 34px; margin-bottom: 2px; }
     .brand-loc { font-size: 12.5px; gap: 0; }
     .brand-loc::before { content: none; }
   }
@@ -791,7 +796,7 @@
 
 <nav>
   <div class="wrap">
-    <div class="brand"><img src="/favicon-192x192.png" alt="Rentify LLC crest" class="brand-mark"><span class="brand-name">Rentify <em>LLC</em></span><span class="brand-loc">Omaha</span></div>
+    <div class="brand"><img src="/favicon-192x192.png" alt="Rentify LLC crest" class="brand-mark"><span class="brand-text"><span class="brand-name">Rentify <em>LLC</em></span><span class="brand-loc">Omaha</span></span></div>
     <div class="navlinks">
       <a href="#destinations">Properties</a>
       <a href="#fleet">Vehicles</a>
