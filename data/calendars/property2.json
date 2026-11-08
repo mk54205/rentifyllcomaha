@@ -1,5 +1,10 @@
 {
   "property": "property2",
-  "updated": "2026-11-04T06:32:10Z",
-  "blocked": []
+  "updated": "2026-11-08T22:11:12Z",
+  "blocked": [
+    {
+      "start": "2026-12-02",
+      "end": "2026-12-07"
+    }
+  ]
 }
